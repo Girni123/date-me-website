@@ -74,6 +74,33 @@ body::before {
   z-index: 0;
 }
 
+/* Very faint drifting line pattern — purely decorative, kept extremely subtle */
+.lines {
+  pointer-events: none;
+  position: fixed;
+  inset: -20% -20%;
+  z-index: 0;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--red) 0px,
+    var(--red) 1px,
+    transparent 1px,
+    transparent 34px
+  );
+  animation: driftLines 60s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes driftLines {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 480px 480px;
+  }
+}
+
 /* ── Stage (one viewport) ─────────────────────── */
 .stage {
   position: relative;
@@ -153,10 +180,15 @@ body::before {
   z-index: 1;
 }
 
-.hero__frame {
+.hero__stack {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.hero__card {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   border-radius: 4px;
   background: var(--red);
@@ -167,13 +199,46 @@ body::before {
   isolation: isolate;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+  transition: transform 0.7s var(--ease), opacity 0.5s ease;
 }
 
-.hero__img {
+.hero__card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
+}
+
+/* Card-stack slots — front card full-size, the rest peek from behind like a
+   stack of photos. Cycling swaps the back-most card to the front slot. */
+.hero__card[data-slot="0"] {
+  z-index: 4;
+  transform: translate(0, 0) scale(1) rotate(0deg);
+  opacity: 1;
+}
+
+.hero__card[data-slot="1"] {
+  z-index: 3;
+  transform: translate(4%, 5%) scale(0.94) rotate(4deg);
+  opacity: 0.95;
+}
+
+.hero__card[data-slot="2"] {
+  z-index: 2;
+  transform: translate(-4%, 9%) scale(0.88) rotate(-5deg);
+  opacity: 0.85;
+}
+
+.hero__card[data-slot="3"] {
+  z-index: 1;
+  transform: translate(3%, 12%) scale(0.82) rotate(3deg);
+  opacity: 0.7;
+}
+
+.hero__card[data-slot="hidden"] {
+  z-index: 0;
+  transform: translate(0, 14%) scale(0.78) rotate(0deg);
+  opacity: 0;
 }
 
 .hero__fallback {
@@ -182,6 +247,7 @@ body::before {
   /* Hidden by default — only shown when image truly fails to load */
   display: none;
   place-items: center;
+  border-radius: 4px;
   background: linear-gradient(160deg, var(--red-hot), var(--red-deep));
   color: var(--white);
   font-family: var(--font-display);
@@ -402,46 +468,45 @@ body::before {
   color: var(--red);
 }
 
-/* Gallery */
+/* Gallery — horizontal scroll strip, next photo always peeking on the side */
 .gallery {
-  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
   width: 100%;
-  aspect-ratio: 3 / 4;
   max-height: 48vh;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery__item {
+  flex: 0 0 80%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   border-radius: 6px;
   background: var(--bg-deep);
-  /* Same Safari/WebKit fix as .hero__frame — see comment there. */
+  /* Same Safari/WebKit fix as .hero__card — see comment there. */
   isolation: isolate;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
 
-.gallery img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Always absolute (never toggled to relative) — changing `position`
-     mid-transition is another known trigger for Safari to drop the paint
-     of a clipped/composited child entirely. */
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0;
-  transform: scale(1.04);
-  transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
-}
-
-.gallery img.is-active {
-  opacity: 1;
-  transform: scale(1);
-  z-index: 1;
-}
-
 .gallery__placeholder {
   display: grid;
   place-items: center;
-  height: 100%;
+  flex: 0 0 80%;
+  aspect-ratio: 3 / 4;
+  border-radius: 6px;
+  background: var(--bg-deep);
   font-family: var(--font-display);
   font-size: 1.8rem;
   color: var(--red);
@@ -450,31 +515,25 @@ body::before {
   padding: 20px;
 }
 
-.gallery__nav {
+.gallery__dots {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
   margin-top: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-size: 0.8rem;
 }
 
-.gallery__nav button {
-  width: 44px;
-  height: 44px;
-  font-size: 1.25rem;
-  color: var(--red);
-  border: 1.5px solid var(--red);
-  border-radius: 4px;
-  transition: background 0.2s ease, color 0.2s ease;
+.gallery__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(225, 6, 0, 0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.gallery__nav button:hover,
-.gallery__nav button:focus-visible {
+.gallery__dot.is-active {
   background: var(--red);
-  color: var(--white);
-  outline: none;
+  transform: scale(1.25);
 }
 
 /* ── Motion ───────────────────────────────────── */

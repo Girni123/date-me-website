@@ -4,14 +4,17 @@
  * ──────────────────────────────────────────────
  *
  * FOTOS: einfach in den Ordner /photos legen:
- *   hero.jpg     → großes Bild in der Mitte
+ *   hero.jpg, hero2.jpg, hero3.jpg …  → Bilder-Stapel in der Mitte
+ *                                        (2–4 Stück empfohlen, unten in der
+ *                                        Liste ergänzen — sie wechseln sich
+ *                                        automatisch wie ein Kartenstapel ab)
  *   01.jpg       → erstes Foto in PHOTOS
  *   02.jpg       → zweites Foto
  *   03.jpg       → drittes Foto
  *   04.jpg …     → beliebig weiter (in der Liste unten ergänzen)
  *
  * Formate: .jpg / .jpeg / .png / .webp — Dateiname muss
- * zum Eintrag unten passen (aktuell noch .svg Platzhalter).
+ * zum Eintrag unten passen.
  */
 window.SITE = {
   name: "David Girnstein",
@@ -39,8 +42,8 @@ window.SITE = {
     },
   ],
 
-  // Hauptbild in der Mitte
-  hero: "photos/hero.jpg",
+  // Hauptbild-Stapel in der Mitte — 2 bis 4 Bilder, wechseln automatisch
+  hero: ["photos/hero.jpg", "photos/01.jpg", "photos/02.jpg"],
 
   // Galerie (PHOTOS-Tab) — Dateinamen = Dateien im Ordner photos/
   photos: [

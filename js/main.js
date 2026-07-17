@@ -13,15 +13,12 @@
   };
 
   let openPanel = null;
-  let galleryIndex = 0;
 
   /* ── Content binding ─────────────────────────── */
   function bindContent() {
     const aboutText = $("#about-text");
     const aboutName = $("#about-name");
     const subline = $(".subline");
-    const heroImg = $("#hero-img");
-    const heroFallback = $("#hero-fallback");
     const links = SITE.links || {};
 
     if (aboutText) aboutText.textContent = SITE.about || "";
@@ -41,19 +38,60 @@
     });
 
     buildFriends();
+    buildHeroStack();
+    buildGallery();
+  }
 
-    if (heroImg && SITE.hero) {
-      heroImg.alt = SITE.name ? `Portrait von ${SITE.name}` : "Portrait";
-      // Only show fallback on genuine load error — image is visible by default
-      heroImg.addEventListener("error", () => {
-        heroFallback?.classList.add("is-visible");
-      });
-      heroImg.src = SITE.hero;
-    } else if (heroFallback) {
-      heroFallback.classList.add("is-visible");
+  /* ── Hero card stack ──────────────────────────── */
+  function buildHeroStack() {
+    const stack = $("#hero-stack");
+    const fallback = $("#hero-fallback");
+    if (!stack) return;
+
+    const heroImages = (Array.isArray(SITE.hero) ? SITE.hero : SITE.hero ? [SITE.hero] : []).filter(Boolean);
+
+    if (!heroImages.length) {
+      fallback?.classList.add("is-visible");
+      return;
     }
 
-    buildGallery();
+    let cards = heroImages.map((src, i) => {
+      const card = document.createElement("div");
+      card.className = "hero__card";
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = SITE.name ? `Portrait von ${SITE.name}` : "Portrait";
+      img.loading = i === 0 ? "eager" : "lazy";
+      img.addEventListener("error", () => {
+        card.remove();
+        cards = cards.filter((c) => c !== card);
+        if (!cards.length) fallback?.classList.add("is-visible");
+      });
+
+      card.appendChild(img);
+      stack.appendChild(card);
+      return card;
+    });
+
+    applyHeroSlots(cards);
+
+    if (cards.length > 1) {
+      setInterval(() => {
+        if (cards.length < 2) return;
+        // Move the back-most card to the front — like drawing the bottom
+        // card off a stack and laying it on top, covering the current one.
+        cards.unshift(cards.pop());
+        applyHeroSlots(cards);
+      }, 4200);
+    }
+  }
+
+  function applyHeroSlots(cards) {
+    const visibleDepth = 4;
+    cards.forEach((card, i) => {
+      card.dataset.slot = i < visibleDepth ? String(i) : "hidden";
+    });
   }
 
   function buildFriends() {
@@ -89,23 +127,24 @@
 
   function buildGallery() {
     const gallery = $("#gallery");
+    const dotsWrap = $("#gallery-dots");
     if (!gallery) return;
 
     gallery.innerHTML = "";
+    if (dotsWrap) dotsWrap.innerHTML = "";
     const items = Array.isArray(SITE.photos) ? SITE.photos : [];
 
     if (!items.length) {
       gallery.innerHTML = `<div class="gallery__placeholder">Fotos in<br/>photos/</div>`;
-      updateGalleryCount();
       return;
     }
 
     items.forEach((photo, i) => {
       const img = document.createElement("img");
+      img.className = "gallery__item";
       img.src = photo.src;
       img.alt = photo.alt || `Foto ${i + 1}`;
-      img.loading = "lazy";
-      if (i === 0) img.classList.add("is-active");
+      img.loading = i === 0 ? "eager" : "lazy";
       img.addEventListener("error", () => {
         img.replaceWith(
           Object.assign(document.createElement("div"), {
@@ -115,25 +154,42 @@
         );
       });
       gallery.appendChild(img);
+
+      if (dotsWrap) {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "gallery__dot";
+        dot.setAttribute("aria-label", `Foto ${i + 1} anzeigen`);
+        if (i === 0) dot.classList.add("is-active");
+        dot.addEventListener("click", () => {
+          img.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+        });
+        dotsWrap.appendChild(dot);
+      }
     });
 
-    galleryIndex = 0;
-    updateGalleryCount();
+    if (items.length > 1) watchGalleryScroll();
   }
 
-  function showGallery(index) {
-    const imgs = $$("#gallery img");
-    if (!imgs.length) return;
-    galleryIndex = (index + imgs.length) % imgs.length;
-    imgs.forEach((img, i) => img.classList.toggle("is-active", i === galleryIndex));
-    updateGalleryCount();
-  }
+  function watchGalleryScroll() {
+    const gallery = $("#gallery");
+    const dots = $$("#gallery-dots .gallery__dot");
+    const imgs = $$(".gallery__item", gallery);
+    if (!gallery || !dots.length || !imgs.length) return;
 
-  function updateGalleryCount() {
-    const el = $("#gallery-count");
-    if (!el) return;
-    const total = Math.max($$("#gallery img").length, 1);
-    el.textContent = `${galleryIndex + 1} / ${total}`;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.6) return;
+          const idx = imgs.indexOf(entry.target);
+          if (idx === -1) return;
+          dots.forEach((dot, i) => dot.classList.toggle("is-active", i === idx));
+        });
+      },
+      { root: gallery, threshold: [0.6] }
+    );
+
+    imgs.forEach((img) => observer.observe(img));
   }
 
   /* ── Panels ──────────────────────────────────── */
@@ -194,35 +250,14 @@
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
-      if (openPanel === "photos") {
-        if (e.key === "ArrowRight") showGallery(galleryIndex + 1);
-        if (e.key === "ArrowLeft") showGallery(galleryIndex - 1);
+      if (openPanel === "photos" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+        const gallery = $("#gallery");
+        const first = gallery?.querySelector(".gallery__item");
+        if (!gallery || !first) return;
+        const step = first.getBoundingClientRect().width + 10;
+        gallery.scrollBy({ left: e.key === "ArrowRight" ? step : -step, behavior: "smooth" });
       }
     });
-
-    $("#gallery-prev")?.addEventListener("click", () => showGallery(galleryIndex - 1));
-    $("#gallery-next")?.addEventListener("click", () => showGallery(galleryIndex + 1));
-
-    const gallery = $("#gallery");
-    if (gallery) {
-      let startX = 0;
-      gallery.addEventListener(
-        "touchstart",
-        (e) => {
-          startX = e.changedTouches[0].screenX;
-        },
-        { passive: true }
-      );
-      gallery.addEventListener(
-        "touchend",
-        (e) => {
-          const dx = e.changedTouches[0].screenX - startX;
-          if (Math.abs(dx) < 40) return;
-          showGallery(dx < 0 ? galleryIndex + 1 : galleryIndex - 1);
-        },
-        { passive: true }
-      );
-    }
 
     Object.values(panels).forEach((panel) => {
       if (!panel) return;

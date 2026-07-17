@@ -9,7 +9,7 @@
     about: $("#panel-about"),
     photos: $("#panel-photos"),
     contact: $("#panel-contact"),
-    friends: $("#panel-friends"),
+    datemenu: $("#panel-datemenu"),
   };
 
   let openPanel = null;
@@ -37,7 +37,7 @@
       el.href = href;
     });
 
-    buildFriends();
+    buildDateMenu();
     buildHeroStack();
     buildGallery();
   }
@@ -94,26 +94,33 @@
     });
   }
 
-  function buildFriends() {
-    const root = $("#friends-quotes");
+  function buildDateMenu() {
+    const root = $("#date-menu-content");
     if (!root) return;
 
-    const items = Array.isArray(SITE.friends) ? SITE.friends : [];
+    const dateMenu = SITE.dateMenu || {};
+    const sections = [
+      { heading: "Icebreaker", items: dateMenu.icebreakers },
+      { heading: "Ideen fürs erste Date", items: dateMenu.firstDate },
+    ].filter((section) => Array.isArray(section.items) && section.items.length);
+
     root.innerHTML = "";
 
-    if (!items.length) {
-      root.innerHTML = `<p class="panel__body">Noch keine Zitate — in js/config.js unter <code>friends</code> eintragen.</p>`;
+    if (!sections.length) {
+      root.innerHTML = `<p class="panel__body">Noch keine Ideen — in js/config.js unter <code>dateMenu</code> eintragen.</p>`;
       return;
     }
 
-    items.forEach((item) => {
-      const figure = document.createElement("figure");
-      figure.className = "quote";
-      figure.innerHTML = `
-        <blockquote class="quote__text">“${escapeHtml(item.quote || "")}”</blockquote>
-        <figcaption class="quote__from">— ${escapeHtml(item.from || "")}</figcaption>
+    sections.forEach((section) => {
+      const wrap = document.createElement("div");
+      wrap.className = "date-menu__section";
+      wrap.innerHTML = `
+        <h3 class="date-menu__heading">${escapeHtml(section.heading)}</h3>
+        <ul class="date-menu__list">
+          ${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
       `;
-      root.appendChild(figure);
+      root.appendChild(wrap);
     });
   }
 

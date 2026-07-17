@@ -78,18 +78,17 @@ body::before {
 .lines {
   pointer-events: none;
   position: fixed;
-  inset: -20% -20%;
+  inset: 0;
   z-index: 0;
-  opacity: 0.05;
+  opacity: 0.07;
   background-image: repeating-linear-gradient(
     135deg,
     var(--red) 0px,
-    var(--red) 1px,
-    transparent 1px,
-    transparent 34px
+    var(--red) 1.2px,
+    transparent 1.2px,
+    transparent 30px
   );
-  animation: driftLines 60s linear infinite;
-  will-change: background-position;
+  animation: driftLines 50s linear infinite;
 }
 
 @keyframes driftLines {
@@ -97,7 +96,7 @@ body::before {
     background-position: 0 0;
   }
   to {
-    background-position: 480px 480px;
+    background-position: 300px 300px;
   }
 }
 
@@ -189,16 +188,10 @@ body::before {
 .hero__card {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   border-radius: 4px;
   background: var(--red);
   box-shadow: 0 18px 40px rgba(177, 0, 0, 0.18);
-  /* Safari/WebKit bug: overflow:hidden + border-radius can fail to paint a
-     composited child (e.g. an object-fit img) at all. Forcing this element
-     into its own layer/stacking context works around it. */
   isolation: isolate;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   transition: transform 0.7s var(--ease), opacity 0.5s ease;
 }
 
@@ -207,6 +200,14 @@ body::before {
   height: 100%;
   object-fit: cover;
   object-position: center top;
+  display: block;
+  border-radius: 4px;
+  /* Rounding via clip-path directly on the image (rather than an
+     overflow:hidden parent) avoids a long-standing Safari/WebKit bug where
+     a composited, transformed child inside an overflow:hidden + border-
+     radius parent sometimes fails to paint at all. */
+  clip-path: inset(0 round 4px);
+  -webkit-clip-path: inset(0 round 4px);
 }
 
 /* Card-stack slots — front card full-size, the rest peek from behind like a
@@ -398,6 +399,10 @@ body::before {
   max-width: 32ch;
 }
 
+#about-text {
+  white-space: pre-line;
+}
+
 .panel__meta {
   margin-top: 18px;
   font-family: var(--font-display);
@@ -444,15 +449,32 @@ body::before {
   opacity: 0.85;
 }
 
-/* Friends quotes */
-.quotes {
+/* Date menu */
+.date-menu {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
   margin-top: 8px;
 }
 
-.quote__text {
+.date-menu__heading {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+
+.date-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.date-menu__list li {
+  position: relative;
+  padding-left: 18px;
   font-size: 1.05rem;
   font-weight: 500;
   line-height: 1.45;
@@ -460,26 +482,31 @@ body::before {
   max-width: 34ch;
 }
 
-.quote__from {
-  margin-top: 8px;
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  letter-spacing: 0.06em;
+.date-menu__list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
   color: var(--red);
 }
 
-/* Gallery — horizontal scroll strip, next photo always peeking on the side */
+/* Gallery — long horizontal strip; each photo is deliberately smaller than
+   the viewport so the previous AND next photo are already peeking in on
+   both sides. */
 .gallery {
   display: flex;
   align-items: stretch;
   gap: 10px;
   width: 100%;
-  max-height: 48vh;
+  max-height: 44vh;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* Side padding = (100% - item width) / 2, so the first/last photo can
+     still be scrolled all the way to a centered position. */
+  padding-inline: 15%;
+  scroll-padding-inline: 15%;
 }
 
 .gallery::-webkit-scrollbar {
@@ -487,23 +514,23 @@ body::before {
 }
 
 .gallery__item {
-  flex: 0 0 80%;
+  flex: 0 0 70%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   scroll-snap-stop: always;
   border-radius: 6px;
   background: var(--bg-deep);
+  display: block;
   /* Same Safari/WebKit fix as .hero__card — see comment there. */
-  isolation: isolate;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  clip-path: inset(0 round 6px);
+  -webkit-clip-path: inset(0 round 6px);
 }
 
 .gallery__placeholder {
   display: grid;
   place-items: center;
-  flex: 0 0 80%;
+  flex: 0 0 70%;
   aspect-ratio: 3 / 4;
   border-radius: 6px;
   background: var(--bg-deep);

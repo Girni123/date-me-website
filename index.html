@@ -26,8 +26,8 @@
       </header>
 
       <section class="orbit" aria-label="Interaktive Bereiche">
-        <button class="hotspot hotspot--tl" type="button" data-panel="about" aria-controls="panel-about">
-          <span>ABOUT</span>
+        <button class="hotspot hotspot--tl" type="button" data-panel="datemenu" aria-controls="panel-datemenu">
+          <span>DATE MENU</span>
         </button>
         <button class="hotspot hotspot--tr" type="button" data-panel="photos" aria-controls="panel-photos">
           <span>PHOTOS</span>
@@ -45,8 +45,8 @@
         <button class="hotspot hotspot--bl" type="button" data-panel="contact" aria-controls="panel-contact">
           <span>CONTACT</span>
         </button>
-        <button class="hotspot hotspot--br" type="button" data-panel="friends" aria-controls="panel-friends">
-          <span>FRIENDS</span>
+        <button class="hotspot hotspot--br" type="button" data-panel="about" aria-controls="panel-about">
+          <span>ABOUT</span>
         </button>
       </section>
 
@@ -93,11 +93,11 @@
       </nav>
     </aside>
 
-    <aside class="panel" id="panel-friends" role="dialog" aria-modal="true" aria-labelledby="friends-title" hidden>
+    <aside class="panel" id="panel-datemenu" role="dialog" aria-modal="true" aria-labelledby="datemenu-title" hidden>
       <div class="panel__handle" aria-hidden="true"></div>
       <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
-      <h2 id="friends-title" class="panel__title">WHAT MY<br />FRIENDS SAY</h2>
-      <div class="quotes" id="friends-quotes"></div>
+      <h2 id="datemenu-title" class="panel__title">DATE MENU</h2>
+      <div class="date-menu" id="date-menu-content"></div>
     </aside>
 
     <script src="js/config.js"></script>

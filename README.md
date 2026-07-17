@@ -11,7 +11,7 @@ Statische Landingpage für den QR-Code auf dem Shirt. Läuft auf **GitHub Pages*
 
 2. **Texte** in [`js/config.js`](js/config.js):
    - `about` — About-Text
-   - `friends` — Zitate unter FRIENDS
+   - `dateMenu` — Icebreaker & Date-Ideen unter DATE MENU
    - Links (Instagram / LinkedIn / Strava) sind schon hinterlegt
 
 3. Lokal testen:
@@ -30,4 +30,4 @@ Statische Landingpage für den QR-Code auf dem Shirt. Läuft auf **GitHub Pages*
 
 ## Interaktion
 
-Ein Viewport, zentrales Foto, vier Labels: **About · Photos · Contact · Friends**. Tippen öffnet ein Bottom-Sheet. Contact bündelt Instagram, LinkedIn und Strava.
+Ein Viewport, zentrales Foto, vier Labels: **Date Menu · Photos · Contact · About**. Tippen öffnet ein Bottom-Sheet. Contact bündelt Instagram, LinkedIn und Strava.

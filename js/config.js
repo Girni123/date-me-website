@@ -16,7 +16,7 @@
 window.SITE = {
   name: "David Girnstein",
   headline: "FUCK DATING APPS",
-  subline: "WANNA MEET IN REAL LIFE",
+  subline: "LETS MEET IN REAL LIFE",
 
   links: {
     instagram: "https://www.instagram.com/david_girnstein/",

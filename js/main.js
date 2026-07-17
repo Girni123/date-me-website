@@ -44,15 +44,21 @@
 
     if (heroImg && SITE.hero) {
       heroImg.alt = SITE.name ? `Portrait von ${SITE.name}` : "Portrait";
-      heroImg.addEventListener("load", () => {
+
+      const showHero = () => {
         heroImg.classList.add("is-loaded");
         heroFallback?.classList.add("is-hidden");
-      });
-      heroImg.addEventListener("error", () => {
+      };
+      const hideHero = () => {
         heroImg.classList.remove("is-loaded");
         heroFallback?.classList.remove("is-hidden");
-      });
+      };
+
+      heroImg.addEventListener("load", showHero);
+      heroImg.addEventListener("error", hideHero);
       heroImg.src = SITE.hero;
+      // Cached images often skip the load event
+      if (heroImg.complete && heroImg.naturalWidth > 0) showHero();
     }
 
     buildGallery();

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#F3EDE4" />
+    <meta name="description" content="Fuck Dating Apps — wanna meet in real life." />
+    <title>Fuck Dating Apps</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <main class="stage" id="stage">
+      <!-- Brand / Slogan -->
+      <header class="brand">
+        <p class="brand__mark" data-text>FUCK DATING</p>
+        <p class="brand__mark brand__mark--overlap" data-text>APPS<sup>®</sup></p>
+      </header>
+
+      <!-- Interactive center -->
+      <section class="orbit" aria-label="Interaktive Bereiche">
+        <button class="hotspot hotspot--tl" type="button" data-panel="about" aria-controls="panel-about">
+          <span>ABOUT</span>
+        </button>
+        <button class="hotspot hotspot--tr" type="button" data-panel="photos" aria-controls="panel-photos">
+          <span>PHOTOS</span>
+        </button>
+
+        <div class="hero">
+          <div class="hero__frame">
+            <img id="hero-img" class="hero__img" src="" alt="Portrait" />
+            <div class="hero__fallback" id="hero-fallback" aria-hidden="true">
+              <span>DEIN<br />FOTO</span>
+            </div>
+          </div>
+          <div class="hero__ring" aria-hidden="true"></div>
+        </div>
+
+        <button class="hotspot hotspot--bl" type="button" data-panel="linkedin" aria-controls="panel-linkedin">
+          <span>LINKEDIN</span>
+        </button>
+        <button class="hotspot hotspot--br" type="button" data-panel="strava" aria-controls="panel-strava">
+          <span>STRAVA</span>
+        </button>
+      </section>
+
+      <p class="subline" data-text>WANNA MEET IN REAL LIFE</p>
+
+      <p class="hint" id="hint">tipp die labels</p>
+    </main>
+
+    <!-- Panels (bottom sheets) -->
+    <div class="scrim" id="scrim" hidden></div>
+
+    <aside class="panel" id="panel-about" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+      <div class="panel__handle" aria-hidden="true"></div>
+      <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
+      <h2 id="about-title" class="panel__title">ABOUT</h2>
+      <p class="panel__body" id="about-text"></p>
+      <p class="panel__meta" id="about-name"></p>
+    </aside>
+
+    <aside class="panel" id="panel-photos" role="dialog" aria-modal="true" aria-labelledby="photos-title" hidden>
+      <div class="panel__handle" aria-hidden="true"></div>
+      <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
+      <h2 id="photos-title" class="panel__title">PHOTOS</h2>
+      <div class="gallery" id="gallery"></div>
+      <div class="gallery__nav">
+        <button type="button" id="gallery-prev" aria-label="Vorheriges Foto">←</button>
+        <span id="gallery-count">1 / 1</span>
+        <button type="button" id="gallery-next" aria-label="Nächstes Foto">→</button>
+      </div>
+    </aside>
+
+    <aside class="panel panel--action" id="panel-linkedin" role="dialog" aria-modal="true" aria-labelledby="li-title" hidden>
+      <div class="panel__handle" aria-hidden="true"></div>
+      <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
+      <h2 id="li-title" class="panel__title">LINKEDIN</h2>
+      <p class="panel__body">Arbeit, Hintergrund, der seriöse Teil.</p>
+      <a class="cta" id="linkedin-link" href="#" target="_blank" rel="noopener noreferrer">
+        Profil öffnen →
+      </a>
+    </aside>
+
+    <aside class="panel panel--action" id="panel-strava" role="dialog" aria-modal="true" aria-labelledby="strava-title" hidden>
+      <div class="panel__handle" aria-hidden="true"></div>
+      <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
+      <h2 id="strava-title" class="panel__title">STRAVA</h2>
+      <p class="panel__body">Laufen, Rad, Outdoor — der Move-Teil.</p>
+      <a class="cta" id="strava-link" href="#" target="_blank" rel="noopener noreferrer">
+        Profil öffnen →
+      </a>
+    </aside>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

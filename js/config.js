@@ -2,27 +2,50 @@
  * ──────────────────────────────────────────────
  *  EDIT THESE — dein Content für die Website
  * ──────────────────────────────────────────────
+ *
+ * FOTOS: einfach in den Ordner /photos legen:
+ *   hero.jpg     → großes Bild in der Mitte
+ *   01.jpg       → erstes Foto in PHOTOS
+ *   02.jpg       → zweites Foto
+ *   03.jpg       → drittes Foto
+ *   04.jpg …     → beliebig weiter (in der Liste unten ergänzen)
+ *
+ * Formate: .jpg / .jpeg / .png / .webp — Dateiname muss
+ * zum Eintrag unten passen (aktuell noch .svg Platzhalter).
  */
 window.SITE = {
-  name: "Dein Name",
+  name: "David Girnstein",
   headline: "FUCK DATING APPS",
   subline: "WANNA MEET IN REAL LIFE",
 
-  // Deine Links (einfach ersetzen)
-  linkedin: "https://www.linkedin.com/in/DEIN-USERNAME/",
-  strava: "https://www.strava.com/athletes/DEINE-ID",
+  links: {
+    instagram: "https://www.instagram.com/david_girnstein/",
+    linkedin: "https://www.linkedin.com/in/davidgirnstein/",
+    strava: "https://www.strava.com/athletes/79860561",
+  },
 
-  // Kurztext fürs About-Panel
-  about: "Kein Swipe. Kein Algorithmus. Einfach real life — Kaffee, Laufen, oder was auch immer sich ergibt.",
+  // Text hier anpassen, wenn du soweit bist
+  about:
+    "Kein Swipe. Kein Algorithmus. Einfach real life — Kaffee, Laufen, oder was auch immer sich ergibt.",
 
-  // Fotos: Dateien nach assets/photos/ legen und hier auflisten
-  // (aktuell SVG-Platzhalter — durch eigene .jpg/.webp ersetzen)
-  photos: [
-    { src: "assets/photos/01.svg", alt: "Portrait 1" },
-    { src: "assets/photos/02.svg", alt: "Portrait 2" },
-    { src: "assets/photos/03.svg", alt: "Portrait 3" },
+  friends: [
+    {
+      quote: "Hier kommt später, was deine Freunde über dich sagen.",
+      from: "Freund:in",
+    },
+    {
+      quote: "Zweiter Spruch — einfach in js/config.js austauschen.",
+      from: "Noch jemand",
+    },
   ],
 
-  // Hauptbild in der Mitte (sollte ein Portrait sein)
-  hero: "assets/photos/hero.svg",
+  // Hauptbild in der Mitte
+  hero: "photos/hero.svg",
+
+  // Galerie (PHOTOS-Tab) — Dateinamen = Dateien im Ordner photos/
+  photos: [
+    { src: "photos/01.svg", alt: "Foto 1" },
+    { src: "photos/02.svg", alt: "Foto 2" },
+    { src: "photos/03.svg", alt: "Foto 3" },
+  ],
 };

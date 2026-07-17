@@ -8,53 +8,40 @@
   const panels = {
     about: $("#panel-about"),
     photos: $("#panel-photos"),
-    linkedin: $("#panel-linkedin"),
-    strava: $("#panel-strava"),
+    contact: $("#panel-contact"),
+    friends: $("#panel-friends"),
   };
 
   let openPanel = null;
   let galleryIndex = 0;
-  let galleryItems = [];
 
   /* ── Content binding ─────────────────────────── */
   function bindContent() {
     const aboutText = $("#about-text");
     const aboutName = $("#about-name");
-    const li = $("#linkedin-link");
-    const st = $("#strava-link");
+    const subline = $(".subline");
     const heroImg = $("#hero-img");
     const heroFallback = $("#hero-fallback");
-    const subline = $(".subline");
+    const links = SITE.links || {};
 
     if (aboutText) aboutText.textContent = SITE.about || "";
     if (aboutName) aboutName.textContent = (SITE.name || "").toUpperCase();
     if (subline && SITE.subline) subline.textContent = SITE.subline;
 
-    if (li) {
-      li.href = SITE.linkedin || "#";
-      if (!SITE.linkedin || SITE.linkedin.includes("DEIN-")) {
-        li.addEventListener("click", (e) => {
-          if (SITE.linkedin?.includes("DEIN-")) {
-            e.preventDefault();
-            alert("LinkedIn-URL in js/config.js eintragen.");
-          }
-        });
-      }
-    }
+    const linkMap = {
+      "link-instagram": links.instagram,
+      "link-linkedin": links.linkedin,
+      "link-strava": links.strava,
+    };
 
-    if (st) {
-      st.href = SITE.strava || "#";
-      if (!SITE.strava || SITE.strava.includes("DEINE-")) {
-        st.addEventListener("click", (e) => {
-          if (SITE.strava?.includes("DEINE-")) {
-            e.preventDefault();
-            alert("Strava-URL in js/config.js eintragen.");
-          }
-        });
-      }
-    }
+    Object.entries(linkMap).forEach(([id, href]) => {
+      const el = $(`#${id}`);
+      if (!el || !href) return;
+      el.href = href;
+    });
 
-    // Hero image with graceful fallback
+    buildFriends();
+
     if (heroImg && SITE.hero) {
       heroImg.alt = SITE.name ? `Portrait von ${SITE.name}` : "Portrait";
       heroImg.addEventListener("load", () => {
@@ -71,30 +58,63 @@
     buildGallery();
   }
 
+  function buildFriends() {
+    const root = $("#friends-quotes");
+    if (!root) return;
+
+    const items = Array.isArray(SITE.friends) ? SITE.friends : [];
+    root.innerHTML = "";
+
+    if (!items.length) {
+      root.innerHTML = `<p class="panel__body">Noch keine Zitate — in js/config.js unter <code>friends</code> eintragen.</p>`;
+      return;
+    }
+
+    items.forEach((item) => {
+      const figure = document.createElement("figure");
+      figure.className = "quote";
+      figure.innerHTML = `
+        <blockquote class="quote__text">“${escapeHtml(item.quote || "")}”</blockquote>
+        <figcaption class="quote__from">— ${escapeHtml(item.from || "")}</figcaption>
+      `;
+      root.appendChild(figure);
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
   function buildGallery() {
     const gallery = $("#gallery");
     if (!gallery) return;
 
     gallery.innerHTML = "";
-    galleryItems = Array.isArray(SITE.photos) ? SITE.photos : [];
+    const items = Array.isArray(SITE.photos) ? SITE.photos : [];
 
-    if (!galleryItems.length) {
-      gallery.innerHTML = `<div class="gallery__placeholder">Fotos in<br/>assets/photos/</div>`;
+    if (!items.length) {
+      gallery.innerHTML = `<div class="gallery__placeholder">Fotos in<br/>photos/</div>`;
       updateGalleryCount();
       return;
     }
 
-    galleryItems.forEach((photo, i) => {
+    items.forEach((photo, i) => {
       const img = document.createElement("img");
       img.src = photo.src;
       img.alt = photo.alt || `Foto ${i + 1}`;
       img.loading = "lazy";
       if (i === 0) img.classList.add("is-active");
       img.addEventListener("error", () => {
-        img.replaceWith(Object.assign(document.createElement("div"), {
-          className: "gallery__placeholder",
-          innerHTML: `Foto ${i + 1}<br/>fehlt`,
-        }));
+        img.replaceWith(
+          Object.assign(document.createElement("div"), {
+            className: "gallery__placeholder",
+            innerHTML: `Foto ${i + 1}<br/>fehlt`,
+          })
+        );
       });
       gallery.appendChild(img);
     });
@@ -128,7 +148,6 @@
 
     panel.hidden = false;
     scrim.hidden = false;
-    // force reflow for transition
     void panel.offsetWidth;
     panel.classList.add("is-open");
     scrim.classList.add("is-open");
@@ -137,7 +156,6 @@
     const hint = $("#hint");
     if (hint) hint.style.visibility = "hidden";
 
-    // focus close for a11y
     panel.querySelector("[data-close]")?.focus();
   }
 
@@ -160,11 +178,8 @@
       if (hint) hint.style.visibility = "";
     };
 
-    if (animate) {
-      setTimeout(finish, 400);
-    } else {
-      finish();
-    }
+    if (animate) setTimeout(finish, 400);
+    else finish();
   }
 
   /* ── Events ──────────────────────────────────── */
@@ -181,7 +196,6 @@
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
-      if (!openPanel) return;
       if (openPanel === "photos") {
         if (e.key === "ArrowRight") showGallery(galleryIndex + 1);
         if (e.key === "ArrowLeft") showGallery(galleryIndex - 1);
@@ -191,7 +205,6 @@
     $("#gallery-prev")?.addEventListener("click", () => showGallery(galleryIndex - 1));
     $("#gallery-next")?.addEventListener("click", () => showGallery(galleryIndex + 1));
 
-    // Swipe on gallery
     const gallery = $("#gallery");
     if (gallery) {
       let startX = 0;
@@ -213,7 +226,6 @@
       );
     }
 
-    // Swipe-down to close panels
     Object.values(panels).forEach((panel) => {
       if (!panel) return;
       let startY = 0;

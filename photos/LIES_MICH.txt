@@ -1,0 +1,19 @@
+FOTOS HIER REINLEGEN
+=====================
+
+Hauptbild (Mitte der Seite):
+  hero.jpg
+
+Galerie (Tab PHOTOS):
+  01.jpg
+  02.jpg
+  03.jpg
+  04.jpg   ← optional, dann in js/config.js unter photos ergänzen
+
+Formate: .jpg  .jpeg  .png  .webp
+
+Nach dem Ablegen:
+  In js/config.js die Endung anpassen
+  (z.B. photos/hero.svg → photos/hero.jpg)
+
+Tipp: Hochformat wirkt am besten (ca. 3:4).

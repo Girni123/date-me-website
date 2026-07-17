@@ -4,17 +4,17 @@ Statische Landingpage für den QR-Code auf dem Shirt. Läuft auf **GitHub Pages*
 
 ## Schnellstart
 
-1. **Content anpassen** in [`js/config.js`](js/config.js):
-   - Name, About-Text
-   - LinkedIn- & Strava-URLs
-   - Foto-Pfade
+1. **Fotos** in den Ordner [`photos/`](photos/) legen:
+   - `hero.jpg` — Portrait in der Mitte
+   - `01.jpg`, `02.jpg`, `03.jpg` … — Galerie unter PHOTOS
+   - Danach in [`js/config.js`](js/config.js) die Endung von `.svg` auf `.jpg` ändern
 
-2. **Fotos ablegen** in `assets/photos/`:
-   - `hero.jpg` — Hauptportrait (Mitte)
-   - `01.jpg`, `02.jpg`, `03.jpg` — Galerie
-   - Danach in `config.js` die Endungen von `.svg` auf `.jpg` (oder `.webp`) ändern
+2. **Texte** in [`js/config.js`](js/config.js):
+   - `about` — About-Text
+   - `friends` — Zitate unter FRIENDS
+   - Links (Instagram / LinkedIn / Strava) sind schon hinterlegt
 
-3. Lokal testen: Ordner öffnen oder z.B.
+3. Lokal testen:
    ```bash
    npx serve .
    ```
@@ -30,4 +30,4 @@ Statische Landingpage für den QR-Code auf dem Shirt. Läuft auf **GitHub Pages*
 
 ## Interaktion
 
-Kein langes Scrollen: ein Viewport, zentrales Foto, vier Labels drumherum (**About / Photos / LinkedIn / Strava**). Tippen öffnet ein Bottom-Sheet.
+Ein Viewport, zentrales Foto, vier Labels: **About · Photos · Contact · Friends**. Tippen öffnet ein Bottom-Sheet. Contact bündelt Instagram, LinkedIn und Strava.

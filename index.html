@@ -19,13 +19,11 @@
     <div class="noise" aria-hidden="true"></div>
 
     <main class="stage" id="stage">
-      <!-- Brand / Slogan -->
       <header class="brand">
-        <p class="brand__mark" data-text>FUCK DATING</p>
-        <p class="brand__mark brand__mark--overlap" data-text>APPS<sup>®</sup></p>
+        <p class="brand__mark">FUCK DATING</p>
+        <p class="brand__mark brand__mark--overlap">APPS<sup>®</sup></p>
       </header>
 
-      <!-- Interactive center -->
       <section class="orbit" aria-label="Interaktive Bereiche">
         <button class="hotspot hotspot--tl" type="button" data-panel="about" aria-controls="panel-about">
           <span>ABOUT</span>
@@ -44,20 +42,18 @@
           <div class="hero__ring" aria-hidden="true"></div>
         </div>
 
-        <button class="hotspot hotspot--bl" type="button" data-panel="linkedin" aria-controls="panel-linkedin">
-          <span>LINKEDIN</span>
+        <button class="hotspot hotspot--bl" type="button" data-panel="contact" aria-controls="panel-contact">
+          <span>CONTACT</span>
         </button>
-        <button class="hotspot hotspot--br" type="button" data-panel="strava" aria-controls="panel-strava">
-          <span>STRAVA</span>
+        <button class="hotspot hotspot--br" type="button" data-panel="friends" aria-controls="panel-friends">
+          <span>FRIENDS</span>
         </button>
       </section>
 
-      <p class="subline" data-text>WANNA MEET IN REAL LIFE</p>
-
+      <p class="subline">WANNA MEET IN REAL LIFE</p>
       <p class="hint" id="hint">tipp die labels</p>
     </main>
 
-    <!-- Panels (bottom sheets) -->
     <div class="scrim" id="scrim" hidden></div>
 
     <aside class="panel" id="panel-about" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
@@ -80,24 +76,32 @@
       </div>
     </aside>
 
-    <aside class="panel panel--action" id="panel-linkedin" role="dialog" aria-modal="true" aria-labelledby="li-title" hidden>
+    <aside class="panel" id="panel-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title" hidden>
       <div class="panel__handle" aria-hidden="true"></div>
       <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
-      <h2 id="li-title" class="panel__title">LINKEDIN</h2>
-      <p class="panel__body">Arbeit, Hintergrund, der seriöse Teil.</p>
-      <a class="cta" id="linkedin-link" href="#" target="_blank" rel="noopener noreferrer">
-        Profil öffnen →
-      </a>
+      <h2 id="contact-title" class="panel__title">CONTACT</h2>
+      <p class="panel__body">Schreib mir — oder stalk erstmal ganz legal.</p>
+      <nav class="contact-list" aria-label="Social Links">
+        <a class="contact-link" id="link-instagram" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="contact-link__label">Instagram</span>
+          <span class="contact-link__arrow">→</span>
+        </a>
+        <a class="contact-link" id="link-linkedin" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="contact-link__label">LinkedIn</span>
+          <span class="contact-link__arrow">→</span>
+        </a>
+        <a class="contact-link" id="link-strava" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="contact-link__label">Strava</span>
+          <span class="contact-link__arrow">→</span>
+        </a>
+      </nav>
     </aside>
 
-    <aside class="panel panel--action" id="panel-strava" role="dialog" aria-modal="true" aria-labelledby="strava-title" hidden>
+    <aside class="panel" id="panel-friends" role="dialog" aria-modal="true" aria-labelledby="friends-title" hidden>
       <div class="panel__handle" aria-hidden="true"></div>
       <button class="panel__close" type="button" data-close aria-label="Schließen">×</button>
-      <h2 id="strava-title" class="panel__title">STRAVA</h2>
-      <p class="panel__body">Laufen, Rad, Outdoor — der Move-Teil.</p>
-      <a class="cta" id="strava-link" href="#" target="_blank" rel="noopener noreferrer">
-        Profil öffnen →
-      </a>
+      <h2 id="friends-title" class="panel__title">WHAT MY<br />FRIENDS SAY</h2>
+      <div class="quotes" id="friends-quotes"></div>
     </aside>
 
     <script src="js/config.js"></script>

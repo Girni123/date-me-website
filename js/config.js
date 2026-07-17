@@ -40,12 +40,12 @@ window.SITE = {
   ],
 
   // Hauptbild in der Mitte
-  hero: "photos/hero.svg",
+  hero: "photos/hero.jpg",
 
   // Galerie (PHOTOS-Tab) — Dateinamen = Dateien im Ordner photos/
   photos: [
-    { src: "photos/01.svg", alt: "Foto 1" },
-    { src: "photos/02.svg", alt: "Foto 2" },
-    { src: "photos/03.svg", alt: "Foto 3" },
+    { src: "photos/01.jpg", alt: "Foto 1" },
+    { src: "photos/02.jpg", alt: "Foto 2" },
+    { src: "photos/03.jpg", alt: "Foto 3" },
   ],
 };

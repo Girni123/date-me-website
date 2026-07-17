@@ -151,8 +151,6 @@ body::before {
   width: min(58vw, 240px);
   aspect-ratio: 3 / 4;
   z-index: 1;
-  /* Labels darunter bleiben klickbar */
-  pointer-events: none;
 }
 
 .hero__frame {
@@ -175,7 +173,8 @@ body::before {
 .hero__fallback {
   position: absolute;
   inset: 0;
-  display: grid;
+  /* Hidden by default — only shown when image truly fails to load */
+  display: none;
   place-items: center;
   background: linear-gradient(160deg, var(--red-hot), var(--red-deep));
   color: var(--white);
@@ -186,8 +185,8 @@ body::before {
   text-align: center;
 }
 
-.hero__fallback.is-hidden {
-  display: none;
+.hero__fallback.is-visible {
+  display: grid;
 }
 
 .hero__ring {
@@ -203,15 +202,18 @@ body::before {
 /* Hotspots around hero */
 .hotspot {
   position: absolute;
-  z-index: 3;
+  /* Explicit high z-index so Safari never puts the hero frame on top */
+  z-index: 10;
   font-family: var(--font-ui);
   font-weight: 800;
   font-size: clamp(0.72rem, 3.2vw, 0.9rem);
   letter-spacing: 0.12em;
   color: var(--red);
-  padding: 14px 8px;
+  /* Larger tap target, especially for bottom buttons */
+  padding: 16px 10px;
+  min-width: 60px;
   min-height: 44px;
-  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.25s var(--ease), color 0.2s ease;
 }
 
@@ -233,22 +235,22 @@ body::before {
 }
 
 .hotspot--tl {
-  top: 6%;
+  top: 4%;
   left: 0;
 }
 
 .hotspot--tr {
-  top: 6%;
+  top: 4%;
   right: 0;
 }
 
 .hotspot--bl {
-  bottom: 8%;
+  bottom: 4%;
   left: 0;
 }
 
 .hotspot--br {
-  bottom: 8%;
+  bottom: 4%;
   right: 0;
 }
 

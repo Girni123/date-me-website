@@ -44,18 +44,13 @@
 
     if (heroImg && SITE.hero) {
       heroImg.alt = SITE.name ? `Portrait von ${SITE.name}` : "Portrait";
-
-      const showHero = () => {
-        heroFallback?.classList.add("is-hidden");
-      };
-      const hideHero = () => {
-        heroFallback?.classList.remove("is-hidden");
-      };
-
-      heroImg.addEventListener("load", showHero);
-      heroImg.addEventListener("error", hideHero);
+      // Only show fallback on genuine load error — image is visible by default
+      heroImg.addEventListener("error", () => {
+        heroFallback?.classList.add("is-visible");
+      });
       heroImg.src = SITE.hero;
-      if (heroImg.complete && heroImg.naturalWidth > 0) showHero();
+    } else if (heroFallback) {
+      heroFallback.classList.add("is-visible");
     }
 
     buildGallery();

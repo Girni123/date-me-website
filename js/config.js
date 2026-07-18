@@ -52,7 +52,7 @@ Seid lieb zueinander!`,
   },
 
   // Hauptbild-Stapel in der Mitte — 2 bis 4 Bilder, wechseln automatisch
-  hero: ["photos/hero.jpg", "photos/Hero2.jpeg"],
+  hero: ["photos/hero.jpg", "photos/Hero2.jpeg", "photos/Hero3.jpeg"],
 
   // Galerie (PHOTOS-Tab) — Dateinamen = Dateien im Ordner photos/
   photos: [

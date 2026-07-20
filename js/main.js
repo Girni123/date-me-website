@@ -25,6 +25,15 @@
     if (aboutName) aboutName.textContent = (SITE.name || "").toUpperCase();
     if (subline && SITE.subline) subline.textContent = SITE.subline;
 
+    const cta = SITE.cta || {};
+    const ctaRoot = $("#cta");
+    const ctaText = $("#cta-text");
+    if (ctaRoot && !cta.text) {
+      ctaRoot.hidden = true;
+    } else if (ctaText && cta.text) {
+      ctaText.textContent = cta.text;
+    }
+
     const linkMap = {
       "link-instagram": links.instagram,
       "link-linkedin": links.linkedin,

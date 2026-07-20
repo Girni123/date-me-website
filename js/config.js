@@ -21,12 +21,6 @@ window.SITE = {
   headline: "FUCK DATING APPS",
   subline: "LETS MEET IN REAL LIFE",
 
-  // Direkter Aufruf auf der Startseite — unter der Subline
-  cta: {
-    headline: "SPRICH MICH DIREKT AN",
-    text: "Du bist gerade in meiner Nähe? Sag einfach Hallo — oder schreib mir gerne.",
-  },
-
   links: {
     instagram: "https://www.instagram.com/david_girnstein/",
     linkedin: "https://www.linkedin.com/in/davidgirnstein/",

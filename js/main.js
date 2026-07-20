@@ -25,17 +25,6 @@
     if (aboutName) aboutName.textContent = (SITE.name || "").toUpperCase();
     if (subline && SITE.subline) subline.textContent = SITE.subline;
 
-    const cta = SITE.cta || {};
-    const ctaRoot = $("#cta");
-    const ctaHeadline = $("#cta-headline");
-    const ctaText = $("#cta-text");
-    if (ctaRoot && !cta.headline && !cta.text) {
-      ctaRoot.hidden = true;
-    } else {
-      if (ctaHeadline && cta.headline) ctaHeadline.textContent = cta.headline;
-      if (ctaText && cta.text) ctaText.textContent = cta.text;
-    }
-
     const linkMap = {
       "link-instagram": links.instagram,
       "link-linkedin": links.linkedin,
@@ -225,9 +214,6 @@
     scrim.classList.add("is-open");
     document.body.style.overflow = "hidden";
 
-    const hint = $("#hint");
-    if (hint) hint.style.visibility = "hidden";
-
     panel.querySelector("[data-close]")?.focus();
   }
 
@@ -246,8 +232,6 @@
       scrim.hidden = true;
       openPanel = null;
       document.body.style.overflow = "";
-      const hint = $("#hint");
-      if (hint) hint.style.visibility = "";
     };
 
     if (animate) setTimeout(finish, 400);
